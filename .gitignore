@@ -123,3 +123,6 @@ logs/
 
 # Modello salvato
 *.h5
+
+# tmp
+\.tmp.drivedownload
