@@ -126,4 +126,4 @@ logs/
 
 # tmp
 \.tmp.drivedownload
-\MNIST-LeNet-5.code-workspace.*
+MNIST-LeNet-5.code-workspace
