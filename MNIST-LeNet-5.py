@@ -57,10 +57,11 @@ plt.show()
 #Invia "tensorboard --logdir=./logs --port 6006" su terminale per analisi visiva su TensorBoard
 
 #Salvataggio lettura e valutazione modello
+V_loss, V_acc = model.evaluate(X_test, y_test)
+print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('inserire il nome del file dove verrà salvato il modello ')
 Nomefile = Nomefile + '.h5'
 model.save (Nomefile)
 keras.models.load_model (Nomefile)
 print(Nomefile,' salvato correttamente')
-V_loss, V_acc = model.evaluate(X_test, y_test)
 print('modello [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
