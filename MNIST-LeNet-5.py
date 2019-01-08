@@ -6,6 +6,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.layers import Flatten,  MaxPooling2D, Conv2D
 from keras.callbacks import TensorBoard
+
 #Leggi e processa i dati del dataset MNIST
 (X_train,y_train), (X_test, y_test) = mnist.load_data()
 X_train = X_train.reshape(60000,28,28,1).astype('float32')
@@ -36,6 +37,19 @@ tensor_board = TensorBoard('./logs/MNIST-LeNet-5')
 #Apprendimento modello
 #history = model.fit(X_train, y_train, batch_size=128, epochs=15, verbose=1, validation_data=(X_test,y_test))
 history = model.fit(X_train, y_train, batch_size=128, epochs=15, verbose=1, validation_data=(X_test,y_test), callbacks=[tensor_board])
+
+#Invia "tensorboard --logdir=./logs --port 6006" su terminale per analisi visiva su TensorBoard
+
+#Salvataggio lettura e valutazione modello
+V_loss, V_acc = model.evaluate(X_test, y_test)
+print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
+Nomefile = input('inserire il nome del file dove verrà salvato il modello ')
+Nomefile = Nomefile + '.h5'
+model.save (Nomefile)
+keras.models.load_model (Nomefile)
+print(Nomefile,' salvato correttamente')
+print('modello [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
+
 # Plot training & validation accuracy values
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
@@ -53,15 +67,3 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
-
-#Invia "tensorboard --logdir=./logs --port 6006" su terminale per analisi visiva su TensorBoard
-
-#Salvataggio lettura e valutazione modello
-V_loss, V_acc = model.evaluate(X_test, y_test)
-print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
-Nomefile = input('inserire il nome del file dove verrà salvato il modello ')
-Nomefile = Nomefile + '.h5'
-model.save (Nomefile)
-keras.models.load_model (Nomefile)
-print(Nomefile,' salvato correttamente')
-print('modello [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
