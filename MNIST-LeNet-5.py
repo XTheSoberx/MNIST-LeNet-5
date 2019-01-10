@@ -35,7 +35,6 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 tensor_board = TensorBoard('./logs/MNIST-LeNet-5')
 
 #Apprendimento modello
-#history = model.fit(X_train, y_train, batch_size=128, epochs=15, verbose=1, validation_data=(X_test,y_test))
 history = model.fit(X_train, y_train, batch_size=128, epochs=15, verbose=1, validation_data=(X_test,y_test), callbacks=[tensor_board])
 
 #Invia "tensorboard --logdir=./logs --port 6006" su terminale per analisi visiva su TensorBoard
