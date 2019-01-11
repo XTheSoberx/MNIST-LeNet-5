@@ -71,6 +71,6 @@ plt.title('y_test Confusion Matrix')
 label = np.argmax(model.predict(x_test), axis=1)
 target = np.argmax(y_test, axis=1)
 confmat = confusion_matrix(target, label)
-sns.heatmap(confmat, annot=True, cmap='tab20c',fmt='d',linewidths=.5)
+sns.heatmap(confmat, annot=True, cmap='flag',fmt='d',linewidths=.5,vmin=-16,vmax=844)
 
 plt.show()
