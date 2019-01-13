@@ -73,7 +73,6 @@ plt.title('y-test Confusion Matrix')
 label = np.argmax(model.predict(x_test), axis=1)
 target = np.argmax(y_test, axis=1)
 confmat = confusion_matrix(target, label)
-import seaborn as sns
 sns.heatmap(confmat, annot=True, cmap='flag',fmt='d',linewidths=.5,vmin=-16,vmax=844)
 
 #Plot 50 prediction errors
