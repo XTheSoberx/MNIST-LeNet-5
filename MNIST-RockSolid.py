@@ -43,14 +43,14 @@ print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
 Nomefile = Nomefile + '.h5'
 model.save (Nomefile)
-tf.keras.models.load_model (Nomefile)
 print(Nomefile,' Model saved')
-V_loss, V_acc = model.evaluate(x_test, y_test)
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
-plt.figure(figsize=(40, 20))
+#Plot grid unit
+plt.figure(figsize=(20, 20))
 
-plt.subplot(2,2,1)
+#Plot Accuracy
+plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
 plt.title('Accuracy ' + Nomefile)
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
@@ -58,7 +58,8 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='lower right')
 
-plt.subplot(2,2,2)
+#Plot Loss
+plt.subplot2grid((10, 20), (0, 10), colspan=9, rowspan=4)
 plt.title('Loss ' + Nomefile)
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
@@ -66,11 +67,32 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper right')
 
-plt.subplot(2,2,3)
-plt.title('y_test Confusion Matrix')
+#Plot Confusion Matrix
+plt.subplot2grid((10, 20), (5, 0), colspan=9, rowspan=4)
+plt.title('y-test Confusion Matrix')
 label = np.argmax(model.predict(x_test), axis=1)
 target = np.argmax(y_test, axis=1)
 confmat = confusion_matrix(target, label)
+import seaborn as sns
 sns.heatmap(confmat, annot=True, cmap='flag',fmt='d',linewidths=.5,vmin=-16,vmax=844)
 
+#Plot 50 prediction errors
+predicted_classes = model.predict_classes(x_test)
+incorrect_indices = np.nonzero(label != target)[0]
+j=1
+r=1
+for i, incorrect in enumerate(incorrect_indices[:49]):
+    j=(i+1)//10
+    r=(i+1)%10
+    if i:
+        plt.subplot2grid((10,20),(5,10))
+        plt.imshow(x_test[incorrect].reshape(28,28), cmap='gray', interpolation='none')
+        plt.title("P:{},T:{}".format(predicted_classes[incorrect],target[incorrect]))
+        plt.xticks([])
+        plt.yticks([])
+    plt.subplot2grid((10,20),(j+5,r+10))
+    plt.imshow(x_test[incorrect].reshape(28,28), cmap='gray', interpolation='none')
+    plt.title("P:{},T:{}".format(predicted_classes[incorrect],target[incorrect]))
+    plt.xticks([])
+    plt.yticks([])
 plt.show()
