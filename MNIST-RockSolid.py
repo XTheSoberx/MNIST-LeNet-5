@@ -73,7 +73,7 @@ plt.title('y-test Confusion Matrix')
 label = np.argmax(model.predict(x_test), axis=1)
 target = np.argmax(y_test, axis=1)
 confmat = confusion_matrix(target, label)
-sns.heatmap(confmat, annot=True, cmap='flag',fmt='d',linewidths=.5,vmin=-16,vmax=844)
+sns.heatmap(confmat, annot=True, cmap='Blues',fmt='d',linewidths=.5,vmin=0,vmax=10,)
 
 #Plot 50 prediction errors
 predicted_classes = model.predict_classes(x_test)
