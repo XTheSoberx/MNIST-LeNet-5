@@ -49,7 +49,7 @@ print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
 #Plot grid unit
-plt.figure(figsize=(20, 20))
+plt.figure(figsize=(16, 100))
 
 #Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
@@ -87,12 +87,12 @@ for i, incorrect in enumerate(incorrect_indices[:49]):
     r=(i+1)%10
     if i:
         plt.subplot2grid((10,20),(5,10))
-        plt.imshow(x_test[incorrect].reshape(28,28), cmap='gray', interpolation='none')
+        plt.imshow(x_test[incorrect].reshape(28,28), cmap='Greys', interpolation='none')
         plt.title("P:{},T:{}".format(predicted_classes[incorrect],target[incorrect]))
         plt.xticks([])
         plt.yticks([])
     plt.subplot2grid((10,20),(j+5,r+10))
-    plt.imshow(x_test[incorrect].reshape(28,28), cmap='gray', interpolation='none')
+    plt.imshow(x_test[incorrect].reshape(28,28), cmap='Greys', interpolation='none')
     plt.title("P:{},T:{}".format(predicted_classes[incorrect],target[incorrect]))
     plt.xticks([])
     plt.yticks([])
