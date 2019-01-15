@@ -15,7 +15,8 @@ y_test = tf.keras.utils.to_categorical(y_test, 10)
 
 # Build the ROCKSOLID Model
 model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Conv2D(8, kernel_size=(5,5), activation=tf.nn.relu, input_shape=(28,28,1)))
+model.add(tf.keras.layers.Conv2D(16, kernel_size=(5,5), activation=tf.nn.relu, 
+          input_shape=(28,28,1)))
 model.add(tf.keras.layers.Conv2D(16, kernel_size=(3,3), activation=tf.nn.relu))
 model.add(tf.keras.layers.Dropout(0.175))
 model.add(tf.keras.layers.Conv2D(32, kernel_size=(5,5), activation=tf.nn.relu))
@@ -35,7 +36,8 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RockSolid')
 
 # Fit "RockSolid" Model
-history = model.fit(x_train, y_train, epochs=15, verbose=1, validation_data=(x_test,y_test), callbacks=[tb])
+history = model.fit(x_train,y_train,epochs=15,verbose=1,batch_size=128,
+                    validation_data=(x_test,y_test),callbacks=[tb])
 
 #Evalutate and Save the Model than analize RockSteady performance with PLT 
 V_loss, V_acc = model.evaluate(x_test, y_test)
