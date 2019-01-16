@@ -19,7 +19,6 @@ while(True):
     gray = (gray.reshape(1, 28,28,1).astype('float32'))/255
     ans = loaded_model.predict(gray)
     ans = np.argmax(ans)
-
     cv2.putText(frame, " RockSolid : " + str(ans), (10, 330),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
     # Display the resulting frame
