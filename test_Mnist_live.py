@@ -20,7 +20,6 @@ while(True):
     ans = loaded_model.predict(gray)
     ans = np.argmax(ans)
     cv2.putText(frame, " RockSolid : " + str(ans), (10, 330),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
     # Display the resulting frame
     cv2.imshow('Press q to exit',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
