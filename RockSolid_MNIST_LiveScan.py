@@ -2,6 +2,12 @@ import cv2
 import tensorflow as tf
 import numpy as np
 
+# Load model from file and set video 
+loaded_model = tf.keras.models.load_model('MRS_9954_0021.h5')
+cap = cv2.VideoCapture(0)
+cap.set(4, 5*128)
+
+# Define function for label a section of image frame with its own label
 def frame_label(frame, label, location = (20,30)):
     cv2.putText(frame, label, location, cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale = 0.5,
@@ -9,6 +15,7 @@ def frame_label(frame, label, location = (20,30)):
                 thickness =  1,
                 lineType =  cv2.LINE_AA)
 
+# Define function for select and resize a rectangle of frame image
 def cut_digit(frame, rect, pad = 10):
     x, y, w, h = rect
     gray_digit = gray[y-pad:y+h+pad, x-pad:x+w+pad]
@@ -19,14 +26,12 @@ def cut_digit(frame, rect, pad = 10):
         return
     return gray_digit
 
-loaded_model = tf.keras.models.load_model('MRS_9954_0021.h5')
-cap = cv2.VideoCapture(0)
-cap.set(4, 5*128)
+# Capture frame-by-frame
 for i in range(10000):
-    # Capture frame-by-frame
     ret, frame = cap.read()
     frame = np.asarray(frame,dtype='uint8')
-    # Our operations on the frame come here
+
+# Convert and normalize frame in grayscale and extract x_test
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
     gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
@@ -41,7 +46,9 @@ for i in range(10000):
             gray_frame = cut_digit(frame, rect, pad = 15)
             if gray_frame is not None:
                gray_frame = np.expand_dims(gray_frame, 0)
-               gray_frame = np.expand_dims(gray_frame, 3) 
+               gray_frame = np.expand_dims(gray_frame, 3)
+               
+# Predict y_test from model and x_test
                label = loaded_model.predict(gray_frame)
                label = str(np.argmax(label))
                cv2.rectangle(frame, (x - 15, y - 15), (x + 15 + w, y + 15 + h),
@@ -50,3 +57,4 @@ for i in range(10000):
     cv2.imshow('RockSolid_MNIST_LiveScan                         press q to quit', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+cv2.destroyAllWindows()

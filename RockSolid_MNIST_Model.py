@@ -39,7 +39,7 @@ tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RockSolid')
 history = model.fit(x_train,y_train,epochs=15,verbose=1,batch_size=128,
                     validation_data=(x_test,y_test),callbacks=[tb])
 
-#Evalutate and Save the Model than analize RockSteady performance with PLT 
+# Evalutate and Save the Model than analize RockSteady performance with PLT 
 V_loss, V_acc = model.evaluate(x_test, y_test)
 print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
@@ -48,10 +48,10 @@ model.save (Nomefile)
 print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
-#Plot grid unit
+# Plot grid unit
 plt.figure(figsize=(16, 100))
 
-#Plot Accuracy
+# Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
 plt.title('Accuracy ' + Nomefile)
 plt.plot(history.history['acc'])
@@ -60,7 +60,7 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='lower right')
 
-#Plot Loss
+# Plot Loss
 plt.subplot2grid((10, 20), (0, 10), colspan=9, rowspan=4)
 plt.title('Loss ' + Nomefile)
 plt.plot(history.history['loss'])
@@ -69,7 +69,7 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper right')
 
-#Plot Confusion Matrix
+# Plot Confusion Matrix
 plt.subplot2grid((10, 20), (5, 0), colspan=9, rowspan=4)
 plt.title('y-test Confusion Matrix')
 label = np.argmax(model.predict(x_test), axis=1)
@@ -77,7 +77,7 @@ target = np.argmax(y_test, axis=1)
 confmat = confusion_matrix(target, label)
 sns.heatmap(confmat, annot=True, cmap='Blues',fmt='d',linewidths=.5,vmin=0,vmax=10)
 
-#Plot 50 prediction errors
+# Plot 50 prediction errors
 predicted_classes = model.predict_classes(x_test)
 incorrect_indices = np.nonzero(label != target)[0]
 j=1
