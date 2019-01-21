@@ -54,7 +54,7 @@ for i in range(10000):
                cv2.rectangle(frame, (x - 15, y - 15), (x + 15 + w, y + 15 + h),
                              color = (0, 0, 255))
                frame_label(frame, label, location = (rect[0], rect[1]))
-    cv2.imshow('RockSolid_MNIST_LiveScan                         press q to quit', frame)
+    cv2.imshow('RockSolid_MNIST_LiveScan -->Press q to quit<--', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 cv2.destroyAllWindows()
