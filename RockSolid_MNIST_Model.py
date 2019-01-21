@@ -31,7 +31,7 @@ model.add(tf.keras.layers.Dense(10,activation=tf.nn.softmax))
 # Compile the model with ADAM optimizer of loss categorical crossentropy
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# TensorBoard Analisis
+# TensorBoard Analysis
 #tensorboard --logdir=./logs --port 6006
 tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RockSolid')
 
