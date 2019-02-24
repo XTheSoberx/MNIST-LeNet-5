@@ -30,7 +30,7 @@ model.add(tf.keras.layers.Dense(10,activation=tf.nn.softmax))
 
 # Compile the model with ADAM optimizer of loss categorical crossentropy
 model.compile(loss = tf.keras.losses.categorical_crossentropy,
-              optimizer = tf.keras.optimizers.Adam(lr=1e-3),
+              optimizer = tf.keras.optimizers.Adam(lr=1e-3, decay=1e-5),
               metrics = ['accuracy'])
 
 # TensorBoard Analysis
@@ -46,7 +46,7 @@ V_loss, V_acc = model.evaluate(x_test, y_test)
 print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
 Nomefile = Nomefile + '.h5'
-model.save (Nomefile)
+tf.keras.models.save_model(model, filepath=Nomefile+'.h5')
 print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
