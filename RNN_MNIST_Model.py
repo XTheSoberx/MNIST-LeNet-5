@@ -4,49 +4,37 @@ import numpy as np
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
-# Import MNIST Dataset
 (x_train, y_train),(x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
-# Split Dataset reshaping Labels and Targets
-x_train = (x_train.reshape(60000,28,28,1).astype('float32'))/255
-x_test = (x_test.reshape(10000,28,28,1).astype('float32'))/255
+x_train=x_train/255
+x_test=x_test/255
 y_train = tf.keras.utils.to_categorical(y_train, 10)
 y_test = tf.keras.utils.to_categorical(y_test, 10)
 
-# Build the ROCKSOLID Model
 model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Conv2D(16, kernel_size=(5,5), activation=tf.nn.relu, 
-          input_shape=(28,28,1)))
-model.add(tf.keras.layers.Conv2D(16, kernel_size=(3,3), activation=tf.nn.relu))
+model.add(tf.keras.layers.CuDNNLSTM(128, input_shape=(x_train.shape[1:]), return_sequences=True))
 model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Conv2D(32, kernel_size=(5,5), activation=tf.nn.relu))
-model.add(tf.keras.layers.Conv2D(64, kernel_size=(3,3), activation=tf.nn.relu))
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
+model.add(tf.keras.layers.CuDNNLSTM(128))
 model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(128,activation=tf.nn.relu))
-model.add(tf.keras.layers.Dropout(0.5))
-model.add(tf.keras.layers.Dense(10,activation=tf.nn.softmax))
+model.add(tf.keras.layers.Dense(32, activation =tf.nn.relu))
+model.add(tf.keras.layers.Dropout(0.2))
+model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
 
-# Compile the model with ADAM optimizer of loss categorical crossentropy
-model.compile(loss = tf.keras.losses.categorical_crossentropy,
-              optimizer = tf.keras.optimizers.Adam(lr=1e-3, decay=1e-5),
-              metrics = ['accuracy'])
 
-# TensorBoard Analysis
-#tensorboard --logdir=./logs --port 6006
-tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RockSolid')
+tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RNN')
 
-# Fit "RockSolid" Model
-history = model.fit(x_train,y_train,epochs=15,verbose=1,batch_size=128,
-                    validation_data=(x_test,y_test),callbacks=[tb])
+model.compile(loss='categorical_crossentropy',
+              optimizer='Adam',
+              metrics=['accuracy'])
+
+history = model.fit(x_train, y_train, epochs=15, validation_data=(x_test, y_test), callbacks=[tb])
 
 # Evalutate and Save the Model than analize RockSteady performance with PLT 
 V_loss, V_acc = model.evaluate(x_test, y_test)
 print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
 Nomefile = Nomefile + '.h5'
-model.save(Nomefile)
+model.save (Nomefile)
 print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
