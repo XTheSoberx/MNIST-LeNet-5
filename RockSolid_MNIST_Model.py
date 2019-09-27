@@ -46,7 +46,7 @@ V_loss, V_acc = model.evaluate(x_test, y_test)
 print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
 Nomefile = Nomefile + '.h5'
-tf.keras.models.save_model(model, filepath=Nomefile+'.h5')
+tf.keras.models.save_model(model, filepath=Nomefile)
 print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
