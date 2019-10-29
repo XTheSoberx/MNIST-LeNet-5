@@ -80,7 +80,6 @@ label = tf.math.argmax(model.predict(x_test), axis=1)
 target = tf.math.argmax(y_test, axis=1)
 confmat = tf.math.confusion_matrix(target, label)
 sns.heatmap(confmat, annot=True, cmap='Blues',fmt='d',linewidths=.5,vmin=0,vmax=10)
-plt.tight_layout()
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 
