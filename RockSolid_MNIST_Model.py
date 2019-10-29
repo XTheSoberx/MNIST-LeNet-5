@@ -76,7 +76,7 @@ plt.legend(['Train', 'Test'], loc='upper right')
 
 # Plot Confusion Matrix
 plt.subplot2grid((10, 20), (5, 0), colspan=9, rowspan=4)
-plt.title('y-test Confusion Matrix')7
+plt.title('y-test Confusion Matrix')
 label = tf.math.argmax(model.predict(x_test), axis=1)
 target = tf.math.argmax(y_test, axis=1)
 confmat = tf.math.confusion_matrix(target, label)
