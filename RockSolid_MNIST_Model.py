@@ -14,7 +14,6 @@ y_train = tf.keras.utils.to_categorical(y_train, 10)
 y_test = tf.keras.utils.to_categorical(y_test, 10)
 
 # Build the ROCKSOLID Model
-
 model = tf.keras.models.Sequential([
   tf.keras.layers.Conv2D(16, kernel_size=(5,5), activation=tf.nn.relu, input_shape=(28,28,1)),
   tf.keras.layers.Conv2D(16, kernel_size=(3,3), activation=tf.nn.relu),
