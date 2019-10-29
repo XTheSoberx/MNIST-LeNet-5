@@ -1,8 +1,8 @@
 import tensorflow as tf
+import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from sklearn.metrics import confusion_matrix
 
 # Import MNIST Dataset
 (x_train, y_train),(x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -35,13 +35,14 @@ model.compile(loss = tf.keras.losses.categorical_crossentropy,
 
 # TensorBoard Analysis
 #tensorboard --logdir=./logs --port 6006
-tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RockSolid')
+logdir = (".\logs\MNIST-RockSolid") + datetime.datetime.now().strftime(" %Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir, histogram_freq=1)
 
 # Fit "RockSolid" Model
 history = model.fit(x_train,y_train,epochs=15,verbose=1,batch_size=128,
-                    validation_data=(x_test,y_test),callbacks=[tb])
+                    validation_data=(x_test,y_test),callbacks=[tensorboard_callback])
 
-# Evalutate and Save the Model than analize RockSteady performance with PLT 
+# Evalutate and Save the Model than analize RockSolid performance with PLT 
 V_loss, V_acc = model.evaluate(x_test, y_test)
 print('[This model  accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]]")
 Nomefile = input('Type your RockSolid Model Name ')
@@ -56,8 +57,8 @@ plt.figure(figsize=(16, 100))
 # Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
 plt.title('Accuracy ' + Nomefile)
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='lower right')
@@ -73,11 +74,14 @@ plt.legend(['Train', 'Test'], loc='upper right')
 
 # Plot Confusion Matrix
 plt.subplot2grid((10, 20), (5, 0), colspan=9, rowspan=4)
-plt.title('y-test Confusion Matrix')
-label = np.argmax(model.predict(x_test), axis=1)
-target = np.argmax(y_test, axis=1)
-confmat = confusion_matrix(target, label)
+plt.title('y-test Confusion Matrix')7
+label = tf.math.argmax(model.predict(x_test), axis=1)
+target = tf.math.argmax(y_test, axis=1)
+confmat = tf.math.confusion_matrix(target, label)
 sns.heatmap(confmat, annot=True, cmap='Blues',fmt='d',linewidths=.5,vmin=0,vmax=10)
+plt.tight_layout()
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
 
 # Plot 50 prediction errors
 predicted_classes = model.predict_classes(x_test)
