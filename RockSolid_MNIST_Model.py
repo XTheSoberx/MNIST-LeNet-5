@@ -14,19 +14,21 @@ y_train = tf.keras.utils.to_categorical(y_train, 10)
 y_test = tf.keras.utils.to_categorical(y_test, 10)
 
 # Build the ROCKSOLID Model
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Conv2D(16, kernel_size=(5,5), activation=tf.nn.relu, 
-          input_shape=(28,28,1)))
-model.add(tf.keras.layers.Conv2D(16, kernel_size=(3,3), activation=tf.nn.relu))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Conv2D(32, kernel_size=(5,5), activation=tf.nn.relu))
-model.add(tf.keras.layers.Conv2D(64, kernel_size=(3,3), activation=tf.nn.relu))
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(128,activation=tf.nn.relu))
-model.add(tf.keras.layers.Dropout(0.5))
-model.add(tf.keras.layers.Dense(10,activation=tf.nn.softmax))
+
+model = tf.keras.models.Sequential([
+  tf.keras.layers.Conv2D(16, kernel_size=(5,5), activation=tf.nn.relu, input_shape=(28,28,1)),
+  tf.keras.layers.Conv2D(16, kernel_size=(3,3), activation=tf.nn.relu),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Conv2D(32, kernel_size=(5,5), activation=tf.nn.relu),
+  tf.keras.layers.Conv2D(64, kernel_size=(5,5), activation=tf.nn.relu),
+  tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Flatten(),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dropout(0.5),
+  tf.keras.layers.Dense(10, activation='softmax')
+])
+model.summary()
 
 # Compile the model with ADAM optimizer of loss categorical crossentropy
 model.compile(loss = tf.keras.losses.categorical_crossentropy,
