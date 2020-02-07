@@ -1,8 +1,8 @@
 import tensorflow as tf
+import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from sklearn.metrics import confusion_matrix
 
 # Import MNIST Dataset
 (x_train, y_train),(x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -14,15 +14,15 @@ y_train = tf.keras.utils.to_categorical(y_train, 10)
 y_test = tf.keras.utils.to_categorical(y_test, 10)
 
 # Build the SNAIL Model
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.CuDNNLSTM(128, input_shape=(x_train.shape[1:]), return_sequences=True))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.CuDNNLSTM(128))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Dense(32, activation =tf.nn.relu))
-model.add(tf.keras.layers.Dropout(0.5))
-model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
-
+model = tf.keras.models.Sequential([
+tf.keras.layers.LSTM(128, input_shape=(x_train.shape[1:]), return_sequences=True),
+tf.keras.layers.Dropout(0.2),
+tf.keras.layers.LSTM(128),
+tf.keras.layers.Dropout(0.2),
+tf.keras.layers.Dense(32, activation =tf.nn.relu),
+tf.keras.layers.Dropout(0.5),
+tf.keras.layers.Dense(10, activation=tf.nn.softmax)
+])
 # Compile the model with ADAM optimizer of loss categorical crossentropy
 model.compile(loss = tf.keras.losses.categorical_crossentropy,
               optimizer = tf.keras.optimizers.Adam(lr=1e-3, decay=1e-5),
@@ -30,10 +30,11 @@ model.compile(loss = tf.keras.losses.categorical_crossentropy,
 
 # TensorBoard Analysis
 #tensorboard --logdir=./logs --port 6006
-tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-Snail')
+logdir = (".\logs\MNIST-Snail") + datetime.datetime.now().strftime(" %Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir, histogram_freq=1)
 
 # Fit "Snail" Model
-history = model.fit(x_train, y_train, epochs=15, validation_data=(x_test, y_test), callbacks=[tb])
+history = model.fit(x_train, y_train, epochs=15, validation_data=(x_test, y_test), callbacks=[tensorboard_callback])
 
 # Evalutate and Save the Model than analize RockSteady performance with PLT 
 V_loss, V_acc = model.evaluate(x_test, y_test)
@@ -42,7 +43,7 @@ Nomefile = input('Type your Snail Model Name ')
 Nomefile = Nomefile + '.h5'
 model.save (Nomefile)
 print(Nomefile,' Model saved')
-print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
+print('Snail [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
 # Plot grid unit
 plt.figure(figsize=(16, 100))
@@ -50,8 +51,8 @@ plt.figure(figsize=(16, 100))
 # Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
 plt.title('Accuracy ' + Nomefile)
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='lower right')
@@ -68,9 +69,9 @@ plt.legend(['Train', 'Test'], loc='upper right')
 # Plot Confusion Matrix
 plt.subplot2grid((10, 20), (5, 0), colspan=9, rowspan=4)
 plt.title('y-test Confusion Matrix')
-label = np.argmax(model.predict(x_test), axis=1)
-target = np.argmax(y_test, axis=1)
-confmat = confusion_matrix(target, label)
+label = tf.math.argmax(model.predict(x_test), axis=1)
+target = tf.math.argmax(y_test, axis=1)
+confmat = tf.math.confusion_matrix(target, label)
 sns.heatmap(confmat, annot=True, cmap='Blues',fmt='d',linewidths=.5,vmin=0,vmax=10)
 
 # Plot 50 prediction errors
