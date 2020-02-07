@@ -7,9 +7,9 @@
 
 # Required:
 
- - Python 3.6.x
+ - Python 3.7.x
  - Numpy
- - TensorFlow
+ - TensorFlow 2.0
  - Scikit-learn
  - Matplotlib
  - Seaborn
