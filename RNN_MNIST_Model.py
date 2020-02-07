@@ -11,17 +11,17 @@ x_test=x_test/255
 y_train = tf.keras.utils.to_categorical(y_train, 10)
 y_test = tf.keras.utils.to_categorical(y_test, 10)
 
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.CuDNNLSTM(128, input_shape=(x_train.shape[1:]), return_sequences=True))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.CuDNNLSTM(128))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Dense(32, activation =tf.nn.relu))
-model.add(tf.keras.layers.Dropout(0.2))
-model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
+model = tf.keras.models.Sequential([
+  tf.keras.layers.LSTM(128, input_shape=(x_train.shape[1:]), return_sequences=True),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.LSTM(128),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(32, activation =tf.nn.relu),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(10, activation=tf.nn.softmax)
+])
 
-
-tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-RNN')
+tb = tf.keras.callbacks.TensorBoard(".\logs\MNIST-RNN")
 
 model.compile(loss='categorical_crossentropy',
               optimizer='Adam',
@@ -44,8 +44,8 @@ plt.figure(figsize=(16, 100))
 # Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
 plt.title('Accuracy ' + Nomefile)
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='lower right')

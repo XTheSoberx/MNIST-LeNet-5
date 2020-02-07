@@ -36,7 +36,7 @@ for i in range(10000):
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
     gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                  cv2.THRESH_BINARY_INV, blockSize = 321, C = 28)
-    aprx, contours, hierarchy, = cv2.findContours(gray.copy(),cv2.RETR_EXTERNAL ,cv2.CHAIN_APPROX_SIMPLE)
+    aprx, contours, hierarchy = cv2.findContours(gray.copy(),cv2.RETR_EXTERNAL ,cv2.CHAIN_APPROX_SIMPLE)
     rects = [cv2.boundingRect(contour) for contour in contours]
     rects = [rect for rect in rects if rect[2] >= 3 and rect[3] >= 8]
     for rect in rects:
