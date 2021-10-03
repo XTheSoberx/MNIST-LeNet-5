@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 
 # Load model from file and set video 
-loaded_model = tf.keras.models.load_model('MRS_9956_0021.h5')
+loaded_model = tf.keras.models.load_model('/mnt/d/OneDrive/Documenti/Repository/MNIST-LeNet-5/MRS_9956_0021.h5')
 cap = cv2.VideoCapture(0)
 cap.set(4, 5*128)
 
