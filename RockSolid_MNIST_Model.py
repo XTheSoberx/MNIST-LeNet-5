@@ -36,7 +36,7 @@ model.compile(loss = tf.keras.losses.categorical_crossentropy,
 
 # TensorBoard Analysis
 #tensorboard --logdir=./logs --port 6006
-logdir = (".\logs\MNIST-RockSolid") + datetime.datetime.now().strftime(" %Y%m%d-%H%M%S")
+logdir = ("./logs/MNIST-RockSolid") + datetime.datetime.now().strftime(" %Y%m%d-%H%M%S")
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir, histogram_freq=1)
 
 # Fit "RockSolid" Model
@@ -53,7 +53,7 @@ print(Nomefile,' Model saved')
 print('RockSolid [',Nomefile, '] accuracy=[', V_acc*100, "%]   loss=[", V_loss,"]")
 
 # Plot grid unit
-plt.figure(figsize=(16, 100))
+plt.figure(figsize=[16, 16])
 
 # Plot Accuracy
 plt.subplot2grid((10, 20),(0, 0), colspan=9, rowspan=4)
@@ -84,7 +84,7 @@ plt.ylabel('True label')
 plt.xlabel('Predicted label')
 
 # Plot 50 prediction errors
-predicted_classes = model.predict_classes(x_test)
+predicted_classes = tf.math.argmax(model.predict(x_test), axis=1)
 incorrect_indices = np.nonzero(label != target)[0]
 j=1
 r=1
