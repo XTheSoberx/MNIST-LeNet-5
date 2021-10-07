@@ -29,7 +29,7 @@ def cut_digit(frame, rect, pad = 10):
 # Capture frame-by-frame
 for i in range(10000):
     ret, frame = cap.read()
-    frame = np.asarray(frame,dtype='uint8')
+    frame = np.asarray(frame)
 
 # Convert and normalize frame in grayscale and extract x_test
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
