@@ -1,13 +1,11 @@
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
-import tensorboard
 from scipy.stats import norm
-
-from keras import backend as K
-from keras.callbacks import TensorBoard
-from keras.layers import Input, Dense, Lambda, Layer, Add, Multiply
-from keras.models import Model, Sequential
-from keras.datasets import mnist
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Input, Dense, Lambda, Layer, Add, Multiply
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.datasets import mnist
 
 
 original_dim = 784
@@ -80,7 +78,7 @@ x_train = x_train.reshape(-1, original_dim) / 255.
 x_test = x_test.reshape(-1, original_dim) / 255.
 
 #tensorboard --logdir=./logs --port 6006
-tb = TensorBoard('./logs/MNIST-Papillon')
+tb = tf.keras.callbacks.TensorBoard('./logs/MNIST-Papillon')
 
 vae.fit(x_train, x_train, shuffle=True, epochs=epochs, 
         batch_size=batch_size, validation_data=(x_test, x_test), callbacks=[tb])
